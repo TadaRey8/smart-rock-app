@@ -1,0 +1,29 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./public:/usr/share/nginx/html
+    networks:
+      - app-network
+
+  node-app:
+    build:
+      context: ./node-app
+      dockerfile: Dockerfile
+    container_name: node-app
+    ports:
+      - '3000:3000'
+    networks:
+      - app-network
+    depends_on:
+      - nginx
+
+networks:
+  app-network:
+    driver: bridge

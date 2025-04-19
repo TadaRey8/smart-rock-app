@@ -1,0 +1,16 @@
+{
+    "name": "smart-lock-api",
+    "version": "1.0.0",
+    "description": "スマートロックAPIサーバー",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2",
+      "body-parser": "^1.20.1"
+    },
+    "devDependencies": {},
+    "author": "",
+    "license": "ISC"
+  }  
