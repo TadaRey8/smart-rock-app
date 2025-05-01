@@ -19,6 +19,8 @@ services:
     container_name: node-app
     ports:
       - '3000:3000'
+    environment:
+      - PICO_URL=http://192.168.0.6  
     networks:
       - app-network
     depends_on:
