@@ -12,27 +12,38 @@ router.get('/lock', (req, res) => {
   res.json({ status: lockState });
 });
 
-// 施錠／開錠いずれも同じtoggleロジック
-async function toggleHandler(req, res) {
+/**
+ * POST /v1/lock
+ * サーボに「lock」コマンドを送信し、状態を 'locked' に更新
+ */
+router.post('/lock', async (req, res) => {
   try {
-    // Pico側の /toggle エンドポイントを叩く
-    const picoRes = await axios.get(`${PICO_URL}/toggle`);
-    console.log('📡 Pico responded:', picoRes.data);
+    const picoRes = await axios.get(`${PICO_URL}/command?cmd=lock`);
+    console.log('Pico lock response:', picoRes.data);
 
-    // サーバー側の状態もトグル
-    lockState = (lockState === 'locked') ? 'unlocked' : 'locked';
+    lockState = 'locked';
     res.json({ status: lockState });
-
   } catch (error) {
-    console.error('❌ Error calling Pico:', error.message);
+    console.error('Error sending lock to Pico:', error.message);
     res.status(500).json({ status: 'error', message: error.message });
   }
-}
+});
 
-// POST /v1/lock
-router.post('/lock', toggleHandler);
+/**
+ * POST /v1/unlock
+ * サーボに「unlock」コマンドを送信し、状態を 'unlocked' に更新
+ */
+router.post('/unlock', async (req, res) => {
+  try {
+    const picoRes = await axios.get(`${PICO_URL}/command?cmd=unlock`);
+    console.log('Pico unlock response:', picoRes.data);
 
-// POST /v1/unlock
-router.post('/unlock', toggleHandler);
+    lockState = 'unlocked';
+    res.json({ status: lockState });
+  } catch (error) {
+    console.error('Error sending unlock to Pico:', error.message);
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
 
 module.exports = router;
