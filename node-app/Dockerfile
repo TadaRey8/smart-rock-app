@@ -1,5 +1,5 @@
-# Node.jsの基本イメージを使用
-FROM node:18
+# Node.jsの軽量イメージを使用
+FROM node:18-slim
 
 # 作業ディレクトリを作成
 WORKDIR /app
@@ -7,8 +7,8 @@ WORKDIR /app
 # パッケージファイルをコンテナにコピー
 COPY package*.json ./
 
-# 依存関係をインストール
-RUN npm install
+# 依存関係をインストールし、脆弱性を修正
+RUN npm install && npm audit fix
 
 # アプリケーションのソースコードをコピー
 COPY . .

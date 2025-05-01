@@ -22,7 +22,7 @@ services:
     networks:
       - app-network
     depends_on:
-      - nginx
+      - nginx  # nginxを先に起動するように
 
 networks:
   app-network:
